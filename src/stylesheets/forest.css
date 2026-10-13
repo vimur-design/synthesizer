@@ -1,0 +1,936 @@
+.forest-studio {
+  margin-top: 20px;
+  overflow: hidden;
+  color: #e4e9db;
+}
+.forest-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 24px 18px;
+}
+.forest-header h2 {
+  font:
+    25px/1.2 Georgia,
+    'Times New Roman',
+    serif;
+  letter-spacing: -0.3px;
+}
+.forest-subtitle {
+  color: #92a58e;
+  font-size: 11px;
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+.forest-audition {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 16px;
+  flex: 0 0 auto;
+  border: 1px solid #657858;
+  border-radius: 7px;
+  color: #d6e5c0;
+  font-size: 11px;
+  background: #30412f;
+  min-width: 141px;
+}
+.forest-audition-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+}
+.forest-audition-wrap small {
+  color: #829578;
+  font-size: 8px;
+}
+.forest-audition:hover {
+  background: #3b4c35;
+  border-color: #879970;
+}
+.forest-audition[aria-pressed='true'] {
+  background: #cde3ac;
+  color: #243322;
+  border-color: #cde3ac;
+}
+.forest-audition-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+.forest-playing .forest-audition-dot {
+  animation: forest-pulse 1.5s ease-in-out infinite;
+}
+.forest-tree-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  border-top: 1px solid #34432f;
+  border-bottom: 1px solid #34432f;
+  background: #25302255;
+}
+.forest-tree-tabs,
+.forest-tree-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.forest-tree-tab {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  color: #8fa68a;
+}
+.forest-tree-tab[aria-pressed='true'] {
+  color: #dfe8d0;
+  border-color: #647958;
+  background: #37472e;
+}
+.forest-tree-tab:hover {
+  color: #e0ebd3;
+}
+.forest-button {
+  border: 1px solid #43563d;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 10px;
+  color: #a9bea0;
+  background: #253220;
+}
+.forest-button:hover {
+  background: #33432b;
+  border-color: #6e835d;
+}
+.forest-button[aria-pressed='true'] {
+  border-color: #769769;
+  color: #d2e4bd;
+}
+.forest-delete {
+  border-color: transparent;
+  color: #92a386;
+  background: transparent;
+}
+.forest-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 228px;
+}
+.forest-scene-wrap {
+  min-width: 0;
+  background: #141e16;
+  display: flex;
+  flex-direction: column;
+}
+.forest-scene {
+  width: 100%;
+  height: auto;
+  min-height: 285px;
+  flex: 1;
+  display: block;
+  touch-action: pan-y;
+  overflow: hidden;
+}
+.forest-scene-caption {
+  font:
+    8px -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  fill: #92ad8b;
+  letter-spacing: 1.5px;
+  pointer-events: none;
+}
+.forest-scene-caption-bottom {
+  font-size: 7px;
+  fill: #677f60;
+  letter-spacing: 1px;
+}
+.forest-branch {
+  cursor: pointer;
+  outline: none;
+}
+.forest-branch-visible {
+  stroke: #688b74;
+  stroke-linecap: round;
+  pointer-events: none;
+  transition:
+    stroke 0.15s,
+    filter 0.15s,
+    opacity 0.15s;
+}
+.forest-branch.selected-tree .forest-branch-visible {
+  stroke: #a0b997;
+}
+.forest-branch-hit {
+  stroke: transparent;
+  stroke-width: 14;
+  stroke-linecap: round;
+  fill: none;
+}
+.forest-branch:hover .forest-branch-visible,
+.forest-branch:focus-visible .forest-branch-visible {
+  stroke: #e3f0bf;
+  filter: drop-shadow(0 0 3px #c6e8b777);
+}
+.forest-branch.selected .forest-branch-visible {
+  stroke: #d0dfb0;
+}
+.forest-branch.sounding .forest-branch-visible {
+  stroke: #fff0b5;
+  filter: drop-shadow(0 0 7px #f4e19a);
+}
+.forest-branch.disabled-tree .forest-branch-visible {
+  opacity: 0.28;
+  stroke-dasharray: 3 5;
+}
+.forest-muted .forest-scene {
+  opacity: 0.62;
+}
+.forest-crown-handle {
+  cursor: move;
+  outline: none;
+  touch-action: none;
+}
+.forest-handle-width {
+  cursor: ew-resize;
+}
+.forest-handle-hit {
+  fill: transparent;
+}
+.forest-handle-core {
+  fill: #203522;
+  stroke: #a1c59a;
+  stroke-width: 1;
+}
+.forest-handle-mark {
+  fill: none;
+  stroke: #d0e2bb;
+  stroke-width: 1;
+  pointer-events: none;
+}
+.forest-crown-handle:hover .forest-handle-core,
+.forest-crown-handle:focus-visible .forest-handle-core {
+  fill: #598450;
+  stroke: #e0f3c4;
+  stroke-width: 2;
+}
+.forest-dragging {
+  user-select: none;
+}
+.forest-dragging .forest-scene {
+  touch-action: none;
+}
+.forest-scene-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 12px 18px;
+  border-top: 1px solid #2a3d2a;
+  min-height: 39px;
+  font-size: 9px;
+  color: #a0b499;
+}
+.forest-scene-footer [data-branch-count] {
+  color: #718d6d;
+  font-variant-numeric: tabular-nums;
+}
+.forest-tree-inspector {
+  padding: 18px;
+  border-left: 1px solid #35492e;
+  background: #24321f55;
+}
+.forest-tree-inspector h3 {
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 0 17px;
+  color: #d3e2c5;
+}
+.forest-control {
+  min-width: 0;
+}
+.forest-tree-inspector .forest-control {
+  margin-top: 15px;
+}
+.forest-control-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.forest-control-heading label {
+  font-size: 10px;
+  color: #a7b99c;
+}
+.forest-control-heading output {
+  font:
+    9px ui-monospace,
+    SFMono-Regular,
+    monospace;
+  color: #d1dfbd;
+  white-space: nowrap;
+}
+.forest-control-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.forest-control input[type='range'] {
+  min-width: 0;
+  width: 100%;
+  flex: 1;
+  margin: 0;
+  height: 15px;
+  accent-color: #adcc9b;
+}
+.forest-control input[type='number'] {
+  width: 61px;
+  min-width: 0;
+  padding: 5px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 1.3;
+  text-align: right;
+  color: #c5d6b7;
+  background: #1a2819;
+  border-color: #3f5536;
+}
+.forest-select-label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 10px;
+  color: #a7b99c;
+}
+.forest-select-label select {
+  padding: 6px 8px;
+  width: 100%;
+  font-size: 11px;
+  background: #1d2d1c;
+  border-color: #425938;
+  color: #d1dfbf;
+}
+.forest-help {
+  font-size: 9px;
+  line-height: 1.6;
+  color: #799271;
+  margin: 16px 0 0;
+}
+.forest-sound-tabs {
+  display: flex;
+  gap: 7px;
+  padding: 13px 24px;
+  border-top: 1px solid #36472e;
+  border-bottom: 1px solid #35442e;
+  background: #1b291b;
+}
+.forest-sound-tabs button {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #839e7b;
+  padding: 8px 13px;
+}
+.forest-sound-tabs button:hover {
+  color: #cce0b7;
+}
+.forest-sound-tabs button[aria-selected='true'] {
+  border-color: #536d46;
+  background: #34482c;
+  color: #d5e8c1;
+}
+.forest-sound-panels {
+  padding: 0 24px 20px;
+  background: #1d2a1b55;
+}
+.forest-group-hint {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #829a78;
+  margin: 15px 0 17px;
+}
+.forest-sound-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+.forest-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 23px 28px;
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.forest-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.forest-pink {
+  display: grid;
+  grid-template-columns: 15px 1fr;
+  gap: 6px;
+  align-items: start;
+  font-size: 10px;
+  color: #c0d2b2;
+  padding-top: 2px;
+}
+.forest-pink input {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+}
+.forest-pink small {
+  grid-column: 2;
+  font-size: 9px;
+  line-height: 1.5;
+  color: #7b9672;
+}
+.forest-rain-field {
+  flex: 0 0 215px;
+}
+.forest-rain-field + .forest-controls-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.forest-xy-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  color: #bad1ab;
+  margin-bottom: 10px;
+}
+.forest-xy-heading [data-xy-value] {
+  font:
+    9px ui-monospace,
+    monospace;
+  color: #829f75;
+}
+.forest-xy-pad {
+  position: relative;
+  height: 140px;
+  border: 1px solid #536b45;
+  border-radius: 7px;
+  background: #152418;
+  cursor: crosshair;
+  touch-action: none;
+  overflow: hidden;
+}
+.forest-xy-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#6e906b12 1px, transparent 1px),
+    linear-gradient(90deg, #6e906b12 1px, transparent 1px);
+  background-size: 25% 25%;
+}
+.forest-xy-band {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  transform: translateX(-50%);
+  background: #7ba89b20;
+  border-left: 1px dashed #83b6a64d;
+  border-right: 1px dashed #83b6a64d;
+  pointer-events: none;
+}
+.forest-xy-point {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #badcc4;
+  border: 2px solid #172f21;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 0 0 3px #a0d3b52b;
+}
+.forest-xy-label {
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  color: #64855f;
+  font-size: 7px;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+.forest-xy-label-bottom {
+  top: auto;
+  bottom: 8px;
+  font-size: 6px;
+}
+.forest-rain-field .forest-help {
+  margin-top: 9px;
+}
+.forest-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 24px;
+  border-top: 1px solid #35442d;
+  color: #8ea27f;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.forest-key-hint {
+  color: #6e8662;
+  white-space: nowrap;
+}
+@keyframes forest-pulse {
+  50% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .forest-playing .forest-audition-dot {
+    animation: none;
+  }
+  .forest-branch-visible {
+    transition: none;
+  }
+}
+@media (max-width: 1100px) {
+  .forest-controls-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .forest-tree-toolbar {
+    flex-wrap: wrap;
+  }
+  .forest-sound-layout:has(.forest-rain-field) .forest-controls-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 800px) {
+  .forest-header {
+    padding: 18px;
+  }
+  .forest-tree-toolbar {
+    padding: 12px 18px;
+  }
+  .forest-workspace {
+    grid-template-columns: 1fr;
+  }
+  .forest-scene {
+    min-height: 280px;
+  }
+  .forest-scene-caption {
+    display: none;
+  }
+  .forest-tree-inspector {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px 20px;
+    border-left: 0;
+    border-top: 1px solid #35492e;
+    padding: 17px 18px;
+  }
+  .forest-tree-inspector h3 {
+    margin: 0;
+    grid-column: 1 / -1;
+  }
+  .forest-tree-inspector .forest-control {
+    margin: 0;
+  }
+  .forest-tree-inspector .forest-help {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .forest-sound-tabs {
+    padding: 12px 18px;
+  }
+  .forest-sound-panels {
+    padding: 0 18px 18px;
+  }
+  .forest-controls-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 21px;
+  }
+  .forest-sound-layout {
+    flex-direction: column;
+  }
+  .forest-rain-field {
+    flex-basis: auto;
+    width: min(360px, 100%);
+  }
+  .forest-sound-layout > .forest-controls-grid {
+    width: 100%;
+  }
+  .forest-status {
+    padding: 12px 18px;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 480px) {
+  .forest-header {
+    align-items: flex-start;
+    padding: 16px 13px;
+    gap: 12px;
+  }
+  .forest-header h2 {
+    font-size: 21px;
+  }
+  .forest-subtitle {
+    font-size: 10px;
+  }
+  .forest-audition {
+    min-width: 95px;
+    padding: 10px 9px;
+    font-size: 9px;
+    gap: 6px;
+  }
+  .forest-tree-toolbar {
+    padding: 10px 13px;
+  }
+  .forest-tree-tab {
+    padding: 7px 9px;
+    font-size: 10px;
+  }
+  .forest-tree-actions {
+    gap: 5px;
+  }
+  .forest-button {
+    font-size: 9px;
+    padding: 7px 8px;
+  }
+  .forest-tree-inspector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 16px 13px;
+  }
+  .forest-tree-inspector .forest-select-label {
+    grid-column: 1 / -1;
+  }
+  .forest-scene {
+    min-height: 230px;
+  }
+  .forest-scene-footer {
+    padding: 11px 13px;
+  }
+  .forest-sound-tabs {
+    gap: 3px;
+    padding: 10px 8px;
+  }
+  .forest-sound-tabs button {
+    padding: 8px 7px;
+    font-size: 10px;
+    flex: 1;
+  }
+  .forest-sound-panels {
+    padding: 0 13px 18px;
+  }
+  .forest-controls-grid {
+    gap: 21px 14px;
+  }
+  .forest-control-heading {
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .forest-control-heading label {
+    font-size: 9px;
+    max-width: 105px;
+    line-height: 1.4;
+  }
+  .forest-control-heading output {
+    font-size: 8px;
+  }
+  .forest-control-inputs {
+    gap: 5px;
+  }
+  .forest-control input[type='number'] {
+    width: 50px;
+    font-size: 9px;
+  }
+  .forest-status {
+    padding: 11px 13px;
+    font-size: 8px;
+  }
+  .forest-key-hint {
+    white-space: normal;
+  }
+}
+
+                                                                
+#forest-studio.forest-studio {
+  min-height: 0;
+  flex: 1;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+}
+.forest-header {
+  flex: 0 0 39px;
+  min-height: 39px;
+  padding: 5px 12px;
+  gap: 10px;
+}
+.forest-header h2 {
+  font-size: 14px;
+}
+.forest-header .eyebrow,
+.forest-subtitle,
+.forest-audition-wrap small {
+  display: none;
+}
+.forest-audition {
+  padding: 7px 9px;
+  min-width: 99px;
+  font-size: 9px;
+  gap: 6px;
+}
+.forest-tree-toolbar {
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+}
+.forest-tree-tabs,
+.forest-tree-actions {
+  gap: 4px;
+}
+.forest-tree-tab {
+  padding: 5px 7px;
+  font-size: 9px;
+}
+.forest-button {
+  padding: 5px 7px;
+  font-size: 8px;
+}
+.forest-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.forest-scene-wrap {
+  flex: 1;
+  min-height: 0;
+}
+.forest-scene {
+  min-height: 0;
+  height: 0;
+  flex: 1;
+  touch-action: none;
+}
+.forest-scene-footer {
+  min-height: 25px;
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  font-size: 7px;
+  gap: 4px;
+}
+.forest-scene-caption {
+  font-size: 9px;
+}
+.forest-tree-inspector {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px 15px;
+}
+.forest-tree-inspector h3,
+.forest-tree-inspector .forest-help {
+  display: none;
+}
+.forest-tree-inspector .forest-control {
+  margin: 0;
+}
+.forest-select-label {
+  gap: 5px;
+  font-size: 9px;
+}
+.forest-select-label select {
+  padding: 5px 6px;
+  font-size: 10px;
+}
+.forest-control-heading {
+  margin-bottom: 5px;
+  gap: 4px;
+}
+.forest-control-heading label {
+  font-size: 9px;
+  line-height: 1.2;
+  max-width: none;
+}
+.forest-control-heading output {
+  font-size: 8px;
+}
+.forest-control-inputs {
+  gap: 5px;
+}
+.forest-control input[type='number'] {
+  width: 47px;
+  padding: 3px 4px;
+  font-size: 9px;
+}
+.forest-control input[type='range'] {
+  height: 13px;
+}
+.forest-sound-tabs {
+  order: 1;
+  flex: 0 0 35px;
+  min-height: 35px;
+  padding: 4px 10px;
+  gap: 3px;
+}
+.forest-sound-tabs button {
+  padding: 5px 8px;
+  font-size: 9px;
+  flex: 0 1 auto;
+}
+.forest-sound-panels {
+  order: 2;
+  flex: 0 0 auto;
+  padding: 0 12px 11px;
+}
+.forest-group-hint {
+  font-size: 8px;
+  line-height: 1.4;
+  margin: 8px 0 9px;
+}
+.forest-controls-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 11px 13px;
+}
+.forest-sound-layout {
+  flex-direction: row;
+  gap: 12px;
+}
+.forest-sound-layout:has(.forest-rain-field) .forest-controls-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.forest-pink {
+  font-size: 9px;
+}
+.forest-pink small {
+  font-size: 7px;
+}
+.forest-rain-field {
+  flex: 0 0 115px;
+  width: 115px;
+}
+.forest-xy-heading {
+  font-size: 8px;
+  margin-bottom: 6px;
+}
+.forest-xy-heading [data-xy-value] {
+  font-size: 7px;
+}
+.forest-xy-pad {
+  height: 91px;
+}
+.forest-rain-field .forest-help {
+  display: none;
+}
+.forest-status {
+  order: 3;
+  min-height: 24px;
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  gap: 5px;
+  font-size: 7px;
+}
+.forest-key-hint {
+  display: none;
+}
+@media (max-width: 800px) {
+  .forest-header {
+    padding: 5px 10px;
+  }
+  .forest-header h2 {
+    font-size: 12px;
+  }
+  .forest-tree-toolbar {
+    padding: 5px 9px;
+  }
+  .forest-tree-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .forest-button {
+    font-size: 8px;
+    padding: 5px 6px;
+  }
+  .forest-scene-caption {
+    display: none;
+  }
+  .forest-scene-footer {
+    padding: 5px 9px;
+    font-size: 6px;
+  }
+  .forest-sound-tabs {
+    padding: 4px 7px;
+  }
+  .forest-sound-tabs button {
+    padding: 5px 6px;
+    font-size: 8px;
+  }
+  .forest-sound-panels {
+    padding: 0 9px 9px;
+  }
+  .forest-tree-inspector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px 12px;
+  }
+  .forest-tree-inspector .forest-select-label {
+    grid-column: 1 / -1;
+  }
+  .forest-controls-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px 12px;
+  }
+  .forest-sound-layout:has(.forest-rain-field) .forest-controls-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .forest-sound-layout {
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .forest-control-heading label {
+    font-size: 8px;
+  }
+  .forest-control-heading output {
+    font-size: 7px;
+  }
+  .forest-control input[type='number'] {
+    width: 43px;
+    font-size: 8px;
+  }
+  .forest-group-hint {
+    font-size: 7px;
+    margin: 7px 0 9px;
+  }
+  .forest-rain-field {
+    flex-basis: 102px;
+    width: 102px;
+  }
+  .forest-status {
+    font-size: 6px;
+    padding: 5px 9px;
+  }
+}

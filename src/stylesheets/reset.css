@@ -1,0 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+[hidden] {
+  display: none !important;
+}

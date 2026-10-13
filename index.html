@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#121812" />
+    <meta
+      name="description"
+      content="Вимузыка — композиция для пиано и резонансного дерева."
+    />
+    <title>Вимузыка — музыкальный эскиз</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Вимузыка"
+          ><span class="brand-mark">∿</span>вимузыка<span class="version"
+            >0.2</span
+          ></a
+        >
+        <div class="file-actions">
+          <span id="save-status" class="save-status" role="status"></span>
+          <div class="history-actions">
+            <button id="undo" class="icon-button small" aria-label="Отменить">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 5-5 5 5 5M4 10h10a6 6 0 0 1 0 12" />
+              </svg></button
+            ><button
+              id="redo"
+              class="icon-button small"
+              aria-label="Повторить изменение"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m15 5 5 5-5 5M20 10H10a6 6 0 0 0 0 12" />
+              </svg>
+            </button>
+          </div>
+          <button id="import" class="text-button">Открыть JSON</button
+          ><button id="export" class="outline-button">
+            Сохранить JSON <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </header>
+      <main>
+        <section class="intro">
+          <div>
+            <p class="eyebrow">СТУДИЯ МАЛЕНЬКИХ КОМПОЗИЦИЙ</p>
+            <input
+              id="project-name"
+              class="project-title"
+              aria-label="Название композиции"
+              maxlength="160"
+            />
+          </div>
+          <div class="sketch-label">
+            <span class="status-dot"></span>ДВА ГОЛОСА<span
+              >4/4 · пиано + резонансные ветви</span
+            >
+          </div>
+        </section>
+        <section class="transport panel" aria-label="Воспроизведение">
+          <div class="transport-buttons">
+            <button id="play" class="play-button" aria-label="Воспроизвести">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 5 11 7-11 7z" /></svg
+              ><span>Играть</span></button
+            ><button id="stop" class="icon-button" aria-label="Остановить">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2" />
+              </svg></button
+            ><button
+              id="loop"
+              class="icon-button"
+              aria-label="Повторять цикл"
+              aria-pressed="true"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="m17 3 4 4-4 4M3 11V9a2 2 0 0 1 2-2h16M7 21l-4-4 4-4m14 0v2a2 2 0 0 1-2 2H3"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="position">
+            <strong id="position">01 : 1</strong><span>ТАКТ : ДОЛЯ</span>
+          </div>
+          <div class="transport-divider"></div>
+          <label class="control"
+            >Темп
+            <span class="control-field"
+              ><input
+                id="bpm"
+                type="number"
+                min="40"
+                max="180"
+                step="1"
+                aria-label="Темп BPM"
+              /><span>BPM</span></span
+            ></label
+          >
+          <label class="control"
+            >Цикл
+            <select id="bars" aria-label="Длина цикла в тактах">
+              <option value="1">1 такт</option>
+              <option value="2">2 такта</option>
+              <option value="3">3 такта</option>
+              <option value="4">4 такта</option>
+              <option value="5">5 тактов</option>
+              <option value="6">6 тактов</option>
+              <option value="7">7 тактов</option>
+              <option value="8">8 тактов</option>
+            </select></label
+          >
+          <label class="check-control"
+            ><input id="metronome" type="checkbox" />Метроном</label
+          >
+          <label class="volume-control"
+            >Громкость<input
+              id="volume"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              aria-label="Громкость" /><output id="volume-value"></output
+          ></label>
+          <div class="level-meter" aria-label="Уровень звука">
+            <i id="meter"></i>
+          </div>
+        </section>
+        <nav class="mobile-voices" aria-label="Голос в рабочем окне">
+          <button
+            type="button"
+            data-workspace-voice="piano"
+            aria-pressed="true"
+          >
+            01 · Пиано</button
+          ><button
+            type="button"
+            data-workspace-voice="tree"
+            aria-pressed="false"
+          >
+            02 · Дерево
+          </button>
+        </nav>
+        <div id="workspace" class="workspace" data-voice="piano">
+          <section
+            class="voice-pane piano-pane panel"
+            aria-label="Первый голос — пиано"
+          >
+            <header class="voice-header">
+              <div>
+                <p class="eyebrow">ПЕРВЫЙ ГОЛОС</p>
+                <h2>Пиано</h2>
+              </div>
+              <div
+                class="voice-tabs"
+                role="tablist"
+                aria-label="Пиано и гармония"
+              >
+                <button
+                  id="track-piano"
+                  type="button"
+                  role="tab"
+                  data-track="piano"
+                  aria-selected="true"
+                  aria-controls="piano-note-slot"
+                >
+                  Ноты</button
+                ><button
+                  id="chords-tab"
+                  type="button"
+                  role="tab"
+                  data-left-view="chords"
+                  aria-selected="false"
+                  aria-controls="chord-panel"
+                >
+                  Гармония
+                </button>
+              </div>
+            </header>
+            <div class="piano-body">
+              <div id="piano-note-slot" class="note-slot">
+                <section
+                  id="note-editor"
+                  class="editor"
+                  aria-label="Редактор нот"
+                >
+                  <div class="editor-toolbar">
+                    <span id="editor-track" class="tiny-label">НОТЫ ПИАНО</span>
+                    <div class="editor-actions">
+                      <span id="note-count"></span
+                      ><button
+                        id="mute"
+                        class="text-button"
+                        aria-pressed="false"
+                      >
+                        Приглушить</button
+                      ><button id="clear" class="text-button">Очистить</button>
+                    </div>
+                  </div>
+                  <div class="grid-toolbar">
+                    <label
+                      >Сетка
+                      <select id="grid" aria-label="Деления сетки">
+                        <option value="4">1/4</option>
+                        <option value="8">1/8</option>
+                        <option value="16">1/16</option>
+                        <option value="32">1/32</option>
+                      </select></label
+                    ><label
+                      >Новая нота
+                      <select
+                        id="new-duration"
+                        aria-label="Длительность новой ноты"
+                      >
+                        <option value="grid">По сетке</option>
+                        <option value="4">1/8</option>
+                        <option value="8">1/4</option>
+                        <option value="16">1/2</option>
+                        <option value="32">1 такт</option>
+                      </select></label
+                    >
+                  </div>
+                  <div id="roll-shell" class="roll-shell">
+                    <div id="pitch-labels" class="pitch-labels"></div>
+                    <div id="roll-scroll" class="roll-scroll">
+                      <div id="ruler" class="ruler"></div>
+                      <svg
+                        id="roll"
+                        class="piano-roll"
+                        role="application"
+                        tabindex="0"
+                        aria-label="Piano roll. Нажмите на пустую клетку, чтобы добавить ноту; перетащите ноту или её правый край. Delete удаляет выбранную ноту."
+                      ></svg>
+                    </div>
+                  </div>
+                  <div class="editor-footer">
+                    <span id="selection-info"
+                      >Клик — нота · перетащи — сдвиг · правый край —
+                      длина</span
+                    >
+                    <div id="note-inspector" hidden>
+                      <label
+                        >Длина (1/32)
+                        <input
+                          id="note-duration"
+                          type="number"
+                          min="1"
+                          aria-label="Длительность выбранной ноты в делениях 1/32" /></label
+                      ><label
+                        >Сила
+                        <input
+                          id="note-velocity"
+                          type="range"
+                          min="0.05"
+                          max="1"
+                          step="0.05"
+                          aria-label="Сила выбранной ноты" /></label
+                      ><button id="delete-note" class="text-button">
+                        Удалить
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <section
+                id="chord-panel"
+                class="chord-panel"
+                aria-label="Гармония композиции"
+                hidden
+              >
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">ОДИН АККОРД НА ТАКТ</p>
+                    <h2>Гармония</h2>
+                  </div>
+                  <span class="tiny-label">ОРГАН</span>
+                </div>
+                <div id="chords" class="chord-list"></div>
+                <p class="panel-description">
+                  Аккорды звучат вместе с мелодией. Пауза оставляет такт без
+                  гармонии.
+                </p>
+              </section>
+            </div>
+            <section class="keyboard-panel" aria-label="Ручная игра">
+              <div class="keyboard-heading">
+                <h2>Поиграй сам</h2>
+                <span id="keyboard-track" class="tiny-label">ПИАНО</span>
+              </div>
+              <div id="keyboard" class="keyboard"></div>
+              <p class="keyboard-note">
+                A W S E D F T G Y H U J K · поверх композиции
+              </p>
+            </section>
+          </section>
+          <section
+            class="voice-pane tree-pane panel"
+            aria-label="Второй голос — дерево"
+          >
+            <header class="voice-header">
+              <div>
+                <p class="eyebrow">ВТОРОЙ ГОЛОС</p>
+                <h2>Дерево</h2>
+              </div>
+              <div
+                class="voice-tabs"
+                role="tablist"
+                aria-label="Дерево и его ноты"
+              >
+                <button
+                  id="tree-view-tab"
+                  type="button"
+                  role="tab"
+                  data-right-view="tree"
+                  aria-selected="true"
+                  aria-controls="forest-studio"
+                >
+                  Дерево</button
+                ><button
+                  id="track-tree"
+                  type="button"
+                  role="tab"
+                  data-track="tree"
+                  aria-selected="false"
+                  aria-controls="tree-note-slot"
+                >
+                  Ноты
+                </button>
+              </div>
+            </header>
+            <section
+              id="forest-studio"
+              aria-label="Редактор резонансного леса"
+            ></section>
+            <div id="tree-note-slot" class="note-slot" hidden></div>
+          </section>
+        </div>
+        <footer class="page-footer">
+          <span>Сетка — места для нот. BPM — скорость музыки.</span
+          ><button id="demo" class="text-button">Вернуть исходный эскиз</button>
+        </footer>
+      </main>
+      <div id="toast" class="toast" role="status" hidden></div>
+      <input
+        id="file-input"
+        type="file"
+        accept=".json,application/json"
+        hidden
+      />
+    </div>
+    <script type="module" src="./src/index.js"></script>
+  </body>
+</html>
