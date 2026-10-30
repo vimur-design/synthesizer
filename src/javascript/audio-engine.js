@@ -310,10 +310,7 @@ class SequencePiano {
   }
 }
 
-async function createSoundGraph(context, volume, forest) {
-  const output = new Tone.Gain({ context, gain: volume })
-  const limiter = new Tone.Limiter({ context, threshold: -2 })
-  const meter = new Tone.Meter({ context, normalRange: true, smoothing: 0.7 })
+function createVoiceChannel(context, destination, pan) {
   const filter = new Tone.Filter({
     context,
     type: 'lowpass',
@@ -326,10 +323,28 @@ async function createSoundGraph(context, volume, forest) {
     feedback: 0.16,
     wet: 0.12
   })
-  filter.chain(delay, output, limiter, meter, context.destination)
-  const sequencePiano = new SequencePiano(context, filter)
-  const livePiano = piano(context).connect(filter)
-  const previewPiano = piano(context).connect(filter)
+  const panner = new Tone.Panner({ context, pan, channelCount: 2 })
+  filter.chain(delay, panner, destination)
+  return {
+    input: filter,
+    dispose() {
+      filter.dispose()
+      delay.dispose()
+      panner.dispose()
+    }
+  }
+}
+
+async function createSoundGraph(context, volume, forest) {
+  const output = new Tone.Gain({ context, gain: volume })
+  const limiter = new Tone.Limiter({ context, threshold: -2 })
+  const meter = new Tone.Meter({ context, normalRange: true, smoothing: 0.7 })
+  output.chain(limiter, meter, context.destination)
+  const pianoChannel = createVoiceChannel(context, output, -0.35)
+  const treeChannel = createVoiceChannel(context, output, 0.35)
+  const sequencePiano = new SequencePiano(context, pianoChannel.input)
+  const livePiano = piano(context).connect(pianoChannel.input)
+  const previewPiano = piano(context).connect(pianoChannel.input)
   previewPiano.maxPolyphony = 8
   const pad = new Tone.PolySynth({
     context,
@@ -340,14 +355,19 @@ async function createSoundGraph(context, volume, forest) {
       oscillator: { type: 'sine' },
       envelope: { attack: 0.22, decay: 0.35, sustain: 0.6, release: 0.9 }
     }
-  }).connect(filter)
+  }).connect(pianoChannel.input)
   const click = new Tone.Synth({
     context,
     volume: -27,
     oscillator: { type: 'sine' },
     envelope: { attack: 0.001, decay: 0.025, sustain: 0, release: 0.008 }
   }).connect(output)
-  const forestBank = new ForestBank(context, filter, forest, context.isOffline)
+  const forestBank = new ForestBank(
+    context,
+    treeChannel.input,
+    forest,
+    context.isOffline
+  )
   try {
     await forestBank.ready()
   } catch (error) {
@@ -358,8 +378,8 @@ async function createSoundGraph(context, volume, forest) {
       previewPiano,
       pad,
       click,
-      filter,
-      delay,
+      pianoChannel,
+      treeChannel,
       output,
       limiter,
       meter
@@ -395,8 +415,8 @@ async function createSoundGraph(context, volume, forest) {
         previewPiano,
         pad,
         click,
-        filter,
-        delay,
+        pianoChannel,
+        treeChannel,
         output,
         limiter,
         meter
